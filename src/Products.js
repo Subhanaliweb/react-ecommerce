@@ -1,9 +1,24 @@
 import React from "react";
 import styled from "styled-components";
+import FilterSection from "./components/FilterSection";
+import Sort from "./components/Sort";
+import ProductList from "./components/ProductList";
 
 const Products = () => {
   return (<Wrapper>
-    <h1>Products</h1>
+    <div className="container grid grid-filter-column">
+    <div>
+      <FilterSection />
+    </div>
+    <section>
+      <div className="sort-filter">
+        <Sort />
+      </div>
+      <div className="main-product">
+        <ProductList />
+      </div>
+    </section>
+    </div>
     </Wrapper>);
 };
 

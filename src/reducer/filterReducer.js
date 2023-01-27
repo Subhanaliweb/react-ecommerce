@@ -22,44 +22,79 @@ const filterReducer = (state, action) => {
         }
 
         case "GET_SORT_VALUE":
-        let userSortValue = document.getElementById("sort");    
-        let sort_value = userSortValue.options[userSortValue.selectedIndex].value;
-        console.log(sort_value);
+        // let userSortValue = document.getElementById("sort");    
+        // let sort_value = userSortValue.options[userSortValue.selectedIndex].value;
+        // console.log(sort_value);
         return{
             ...state,
-            sorting_value: sort_value,
+            sorting_value: action.payload,
             };
 
         case "SORTING_PRODUCTS":
         let newSortData;
-        let tempSortProduct = [...action.payload];
 
-        if(state.sorting_value === "lowest"){
-            const sortingProducts = (a,b) => {
+        const { filter_products, sorting_value } = state;
+        let tempSortProduct = [...filter_products];
+
+        const sortingProducts = (a,b) => {
+            if(sorting_value === "lowest"){
                 return a.price - b.price;
             }
-            newSortData = tempSortProduct.sort(sortingProducts);
-        }
-        if(state.sorting_value === "highest"){
-            const sortingProducts = (a,b) => {
+            if(sorting_value === "highest"){
                 return b.price - a.price;
             }
-            newSortData = tempSortProduct.sort(sortingProducts);
-        }
-        if(state.sorting_value === "a-z"){
-            newSortData = tempSortProduct.sort((a, b) => {
+            if(sorting_value === "a-z"){
                 return a.name.localeCompare(b.name);
-            });
-        }
-        if(state.sorting_value === "z-a"){
-            newSortData = tempSortProduct.sort((a, b) => {
+            }
+            if(sorting_value === "z-a"){
                 return b.name.localeCompare(a.name);
-            });
-        }
+            }
+        };
+
+
+        newSortData = tempSortProduct.sort(sortingProducts);
+
             return{
                 ...state,
                 filter_products: newSortData,
             };
+        case "UPDATE_FILTER_VALUE":
+            const {name, value} = action.payload;
+            return {
+                ...state,
+                filters: {
+                    ...state.filters, [name]:value,
+                }
+            }
+
+        case "FILTER_PRODUCTS":
+         
+        let {all_products} = state;
+        let tempFilterProducts = [...all_products]; 
+
+        const {text, category, company, color} = state.filters;
+        if(text){
+            tempFilterProducts = tempFilterProducts.filter((currElem) => {
+                return currElem.name.toLowerCase().includes(text);
+            })
+        }
+        if(category !== "all"){
+            tempFilterProducts = tempFilterProducts.filter((currElem) => {
+                return currElem.category === category;
+            })
+        }
+        if(company !== "all"){
+            tempFilterProducts = tempFilterProducts.filter((currElem) => {
+                return currElem.company.toLowerCase() === company.toLowerCase();
+            })
+        }
+        if(color){
+            tempFilterProducts = tempFilterProducts.filter((currElem) => currElem.colors.includes(color)); 
+        }
+        return {
+            ...state,
+            filter_products: tempFilterProducts,
+        }
 
     default:
         return state 

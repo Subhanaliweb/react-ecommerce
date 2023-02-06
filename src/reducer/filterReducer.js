@@ -98,7 +98,7 @@ const filterReducer = (state, action) => {
         }
         if(price === 0){
             tempFilterProducts = tempFilterProducts.filter(
-                (currElem) => currElem.price == price
+                (currElem) => currElem.price === price
             );
         }   else {
             tempFilterProducts = tempFilterProducts.filter(

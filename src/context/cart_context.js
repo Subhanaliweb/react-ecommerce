@@ -7,11 +7,14 @@ const CartProvider = ({children}) => {
 
     const getLocalCartData = () => {
         let LocalCartData = localStorage.getItem('cart');
-        if(LocalCartData === []){
-            return [];
-        } else {
-            return JSON.parse(LocalCartData);
-        }
+        // if(LocalCartData === []){
+        //     return [];
+        // } else {
+        //     return JSON.parse(LocalCartData);
+        // }
+        const parsedData = JSON.parse(LocalCartData);
+        if(!Array.isArray(parsedData)) return [];
+        return parsedData;
     }
 
     const initialState = {
